@@ -1,6 +1,8 @@
 package in.raam.twsh.command.impl;
 
+import in.raam.twsh.main.TwittyShell;
 import in.raam.twsh.oauth.OAuthConsumerHolder;
+import in.raam.twsh.util.TwittyShellExceptionHandler;
 import in.raam.twsh.util.Util;
 
 import java.util.List;
@@ -12,12 +14,10 @@ import java.util.List;
  */
 public class LoginCommand extends AbstractTwitterCommand {
 
-/*    static final String[] required = { "username" };
-
-    protected String[] getRequired() {
-        return required;
-    }*/
-
+    /*
+     * (non-Javadoc)
+     * @see in.raam.twsh.command.TwitterCommand#execute(java.lang.String[])
+     */
     @Override
     public List<String> execute(String[] args) {
         try {
@@ -25,9 +25,10 @@ public class LoginCommand extends AbstractTwitterCommand {
                 OAuthConsumerHolder.authorize("DUMMY");
             else //if user name is provided search in store
                 OAuthConsumerHolder.authorize(args[0]);
+            TwittyShell.addUser(args[0]);
             return Util.newList("Logged in and authorized!");
         } catch (Exception e) {
-            e.printStackTrace();
+            TwittyShellExceptionHandler.handleException(e);
             return Util.newList("Error occured while authorising");
         }
     }

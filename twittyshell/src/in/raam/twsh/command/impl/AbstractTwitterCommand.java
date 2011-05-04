@@ -1,6 +1,15 @@
 package in.raam.twsh.command.impl;
 
 import in.raam.twsh.command.TwitterCommand;
+import in.raam.twsh.command.domain.User;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * Super class of all twitter commands providing some convenience methods and default implementation
@@ -8,8 +17,8 @@ import in.raam.twsh.command.TwitterCommand;
  * @author raam
  *
  */
-public abstract class AbstractTwitterCommand implements TwitterCommand {
-
+public abstract class AbstractTwitterCommand implements TwitterCommand { 
+    
     protected String[] getRequired() {
         return new String[0];
     }
@@ -38,5 +47,15 @@ public abstract class AbstractTwitterCommand implements TwitterCommand {
             sb.append("<" + s + "> ");
         return sb.toString();
     }
-
+ 
+    protected List<String> extractUsers(String jsonResponse){
+        Gson gson = new Gson();
+        Type collType = new TypeToken<Collection<User>>() {}.getType();
+        Collection<User> users = gson.fromJson(jsonResponse, collType);
+        List<String> l = new ArrayList<String>();
+        for(User u: users)
+            l.add(u.toString());
+        return l;               
+    }
+    
 }
