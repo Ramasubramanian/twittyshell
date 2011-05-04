@@ -1,5 +1,6 @@
 package in.raam.twsh.command.impl;
 
+import in.raam.twsh.main.TwittyShell;
 import in.raam.twsh.oauth.AccessKeyStore;
 import in.raam.twsh.oauth.OAuthConsumerHolder;
 import in.raam.twsh.util.Util;
@@ -28,6 +29,7 @@ public class LogoutCommand extends AbstractTwitterCommand {
     public List<String> execute(String[] args) {
         OAuthConsumerHolder.logout();
         AccessKeyStore.removeAccessKey(args[0]);
+        TwittyShell.removeUser();
         return Util.newList("Logged out successfully!");
     }
 

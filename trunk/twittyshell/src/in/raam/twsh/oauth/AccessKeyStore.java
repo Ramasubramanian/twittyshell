@@ -11,7 +11,7 @@ import static in.raam.twsh.util.Constants.*;
 
 /**
  * Helper class that acts as an in-memory store for storing access keys and secrets. Tokens added
- * to this class will be serialized into the keystore file located in user.home folder and used
+ * to this class will be serialized into the key store file located in user.home folder and used
  * in all future transactions
  * @author raam
  *
@@ -31,7 +31,7 @@ public class AccessKeyStore {
             if(f.exists()) {
                 BufferedReader br = new BufferedReader(new FileReader(f));
                 while((line = br.readLine())!=null)
-                    m_Keys.put(line.split("=")[0], getObject(line.split("=")[1]));
+                    m_Keys.put(CryptDecrypter.decrypt(line.split("=")[0]), getObject(line.split("=")[1]));
                 br.close();
             }else {
                 System.out.println("Keystore not found, suppose this is your first login in this machine");
@@ -78,15 +78,13 @@ public class AccessKeyStore {
         return new File(file);
     }
     
-    /**
-     * Serialize the key store contents to the .twitshell file located at user.home folder
-     */
+    
     public static void saveKeyStore() {
         FileWriter fw ;
         try {
             fw = new FileWriter(getKeyStoreFile());
             for(Map.Entry<String, AccessKeyWithSecret> e: m_Keys.entrySet()) {
-                fw.write(e.getKey()+"="+e.getValue().getKey()+","+e.getValue().getSecret()+LS);
+                fw.write(CryptDecrypter.encrypt(e.getKey())+"="+e.getValue().getKey()+","+e.getValue().getSecret()+LS);
             }
             fw.close();
         } catch (Exception e) {

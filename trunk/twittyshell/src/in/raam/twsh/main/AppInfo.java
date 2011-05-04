@@ -8,7 +8,7 @@ package in.raam.twsh.main;
 public abstract class AppInfo {
 
     public static String getVersion() {
-        return "v0.1";
+        return "v0.2";
     }
     
     public static String getName() {

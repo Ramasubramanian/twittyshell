@@ -2,10 +2,12 @@ package in.raam.twsh.command;
 
 import in.raam.twsh.command.impl.EchoingCommand;
 import in.raam.twsh.command.impl.FollowersCommand;
-import in.raam.twsh.command.impl.TimelineCommand;
+import in.raam.twsh.command.impl.FriendshipCommand;
 import in.raam.twsh.command.impl.LoginCommand;
 import in.raam.twsh.command.impl.LogoutCommand;
+import in.raam.twsh.command.impl.TimelineCommand;
 import in.raam.twsh.command.impl.TweetCommand;
+import in.raam.twsh.command.impl.TweetOpCommand;
 import in.raam.twsh.util.Util;
 
 import java.util.HashMap;
@@ -55,12 +57,16 @@ public final class CommandStore {
         m_Map.put("following", FollowersCommand.FOLLOWING);
         m_Map.put("rtofme", TimelineCommand.RT_OF_ME);
         m_Map.put("retweeted", TimelineCommand.RETWEETED);
+        m_Map.put("rm", TweetOpCommand.DESTROY_TWEET);
+        m_Map.put("rt", TweetOpCommand.RETWEET);
+        m_Map.put("follow", FriendshipCommand.FOLLOW_COMMAND);
+        m_Map.put("dontfollow", FriendshipCommand.DONT_FOLLOW_COMMAND);
     }
     
     /**
      * Provides the command Object based on command String
      * @param str
-     *              Command String enetered by the user
+     *              Command String entered by the user
      * @return
      */
     public static TwitterCommand get(String str) {

@@ -3,7 +3,9 @@ package in.raam.twsh.util;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Helper class providing utility functions across the application
@@ -84,8 +86,12 @@ public abstract class Util {
      * @param str
      * @return
      */
-    public static boolean isEmpty(String str) {
-        return str == null || str.length() == 0;
+    public static boolean isEmpty(Object str) {
+        if(str!=null) {
+            if(str instanceof String)
+                return ((String) str).length() == 0;
+        }
+        return true;
     }
     
     /**
@@ -101,5 +107,13 @@ public abstract class Util {
         else
             return new String[0];
     }
+    
+    public static <T> Set<T> newSet(T ... array) {
+        Set<T> s = new LinkedHashSet<T>();
+        for(T t:array)
+            s.add(t);
+        return s;
+    }
+    
 
 }

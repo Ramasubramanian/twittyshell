@@ -1,17 +1,18 @@
 package in.raam.twsh.oauth;
 
+import in.raam.twsh.comm.TwitterRequest;
 import in.raam.twsh.util.Util;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.Map;
+import java.util.List;
+import java.util.Map.Entry;
 
 import oauth.signpost.OAuthConsumer;
 
 /**
  * Adapter class that acts as a JSON Rest client interacting with the twitter REST API server, internally takes care of 
- * signing OAuth requests with the signpost consumer
+ * signing OAuth requests with the sign post consumer
  * @author raam
  *
  */
@@ -28,29 +29,14 @@ public class JsonRestClient {
      * @return
      * @throws Exception
      */
-    public String getResponse(String urlStr, OAuthConsumer consumer,
-            Map<String, ?> params) throws Exception {
-        URL url = new URL(urlStr);
-        HttpURLConnection request = (HttpURLConnection) url.openConnection();
-        consumer.sign(request);
-        request.connect(); 
-        return Util.mkString(request.getInputStream());
+    public String getResponse(TwitterRequest twitterRequest, OAuthConsumer consumer) throws Exception {
+        URL url = new URL(twitterRequest.url()+twitterRequest.paramString());
+        HttpURLConnection req = (HttpURLConnection) url.openConnection();
+        consumer.sign(req);
+        req.connect(); 
+        return Util.mkString(req.getInputStream());
     }
 
-    /**
-     * Assemble the request parameter String using the provided param map
-     * @param params
-     *                  Map object containing the request parameter as key-value pairs
-     * @return
-     * @throws Exception
-     */
-    public String getParamString(Map<String,?> params) throws Exception{
-        StringBuilder sb = new StringBuilder();
-        for(Map.Entry<String, ?> e: params.entrySet())
-            sb.append(e.getKey().toString()+"="+URLEncoder.encode(e.getValue().toString(),"UTF-8")).append("&");
-        sb.deleteCharAt(sb.length()-1);
-        return sb.toString();
-    }
     
     /**
      * Post a request to the Twitter REST API server and return the response string as a JSON 
@@ -63,11 +49,8 @@ public class JsonRestClient {
      * @return
      * @throws Exception
      */
-    public String postRequest(String urlStr, OAuthConsumer consumer,
-            Map<String, ?> params) throws Exception{
-        String paramStr = getParamString(params);
-        //System.out.println("Final URL::"+urlStr+"?"+paramStr);
-        URL url = new URL(urlStr+"?"+paramStr);
+    public String postRequest(TwitterRequest twitterRequest, OAuthConsumer consumer) throws Exception{
+        URL url = new URL(twitterRequest.url()+twitterRequest.paramString());
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
         request.setRequestMethod("POST");          
         consumer.sign(request);
