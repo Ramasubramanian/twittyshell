@@ -40,8 +40,5 @@ public class CryptDecrypter {
         return ret.toString();
     }      
     
-    public static void main(String[] args) {
-        System.out.println(encrypt("ramsankar83"));
-    }
 }
 
