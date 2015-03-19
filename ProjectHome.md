@@ -1,0 +1,1 @@
+Java based interactive command line client for Twitter. For people who love to do things with command instead of GUI like me. The aim of this project is to provide a basic command line tool for interacting with Twitter and not a full fledged replacement for powerful tools like TweetDeck etc. If you feel command line sucks please excuse!
